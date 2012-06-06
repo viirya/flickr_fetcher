@@ -11,4 +11,8 @@ Since `flickrnode` module can not be installed by npm, you shoule git clone it i
 
 ## Usage
 
-    coffee query.coffee -t <query term> -p <image download path>
+	coffee query.coffee -t <query term> -i <image download path> -f <feature storing path> -m <image processing path> -l <geolocation> -c <database collection>
+
+For example:
+	coffee query.coffee -t paris -i ./test -f ./feature -m ./tmp -l 'Paris, France' -c paris
+
