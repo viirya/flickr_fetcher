@@ -15,7 +15,18 @@ class Flickr_Fetcher
 
     search: (callback) ->
 
-        @flickr.photos.search({tags: @options.keyword, extras: 'url_m,description,geo,tags,date_upload,date_taken'}, (error, results) ->
+        search_args =
+            tags: @options.keyword
+            extras: 'url_m,description,geo,tags,date_upload,date_taken'
+
+        if (@options.page?)
+            search_args.page = @options.page
+        if (@options.bbox?)
+            search_args.bbox = @options.bbox
+
+        console.log(search_args)
+
+        @flickr.photos.search(search_args, (error, results) ->
             callback(results)
         )
 
