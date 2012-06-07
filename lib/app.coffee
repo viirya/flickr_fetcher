@@ -60,9 +60,11 @@ class App
 
             regex = /http:\/\/(.*?)\/(.*)/
 
+            photos = results.photo.slice(0)
+
             download = =>
                 
-                photo = results.photo.pop()
+                photo = photos.pop()
                 
                 if (photo?)
                     console.log("downloading #{photo.url_m}")
@@ -72,7 +74,6 @@ class App
                     path = '/' + match[2]
  
                     download_cb = (photo) =>
-                    
                         command = "convert #{@options.imgdir}/#{photo.id}.jpg #{@options.tmpdir}/#{photo.id}.pgm"
                         exec(command, (error, stdout, stderr) =>
                             if (error?)
@@ -132,14 +133,18 @@ class App
 
                     console.log("Begin to store photo information into database")
 
+                    photos = results.photo.slice(0)
+                    count = 0
                     push_photo = ->
-                        photo = results.photo.pop()
+                        photo = photos.pop()
                         if (photo?)
                             collection.insert(photo, {safe:true}, (err, result) ->
                                 assert.equal(null, err)
+                                count++
                                 push_photo()
                             )
                         else
+                            console.log("Total #{count} photos inserted")
                             next_cb()
 
                     push_photo()
