@@ -84,8 +84,7 @@ class App
                                 exec(command, (error, stdout, stderr) =>
                                     if (error?) 
                                         console.log('exec error: ' + error);
-                                    else
-                                        download()
+                                    download()
                                 )
                         )
                     
@@ -138,6 +137,7 @@ class App
                     push_photo = ->
                         photo = photos.pop()
                         if (photo?)
+                            photo.random = Math.random()
                             collection.insert(photo, {safe:true}, (err, result) ->
                                 assert.equal(null, err)
                                 count++
