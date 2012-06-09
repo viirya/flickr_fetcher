@@ -11,8 +11,26 @@ Since `flickrnode` module can not be installed by npm, you shoule git clone it i
 
 ## Usage
 
+### Search Flickr photos
+
 	coffee query.coffee -t <query term> -i <image download path> -f <feature storing path> -m <image processing path> -l <geolocation> -c <database collection>
 
 For example:
 	coffee query.coffee -t paris -i ./test -f ./feature -m ./tmp -l 'Paris, France' -c paris
 
+### Sample photos from fetched Flickr photos
+
+	sample.coffee -c <database collection> -f <feature storing path> -d <output file> -s <sample number>
+	
+For example:
+	sample.coffee -c paris -f ./features -d test.clu -s 1000
+	
+### Clustering of sampled photos
+
+	python cluster.py -f <sampled photo features> -o <output file> -k <number of clusters>
+	
+In addition to "output file", another file "output file" + ".meta" will be created that contains mean and std feature vector of sampled features.
+	
+For example:
+	python cluster.py -f test.clu -o sample.kmean -k 64
+	
