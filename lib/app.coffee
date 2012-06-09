@@ -1,5 +1,5 @@
 
-sys = require('sys')
+sys = require('util')
 cli = require('cli')
 prompt = require('prompt')
 assert = require('assert')
@@ -41,6 +41,8 @@ class App
                 else
                     console.log("Error in decoding geolocation")
             ) 
+        else
+            cb()
 
     run: ->
 
@@ -52,7 +54,7 @@ class App
             @cur_page = results.page
 
             console.log("Obtain search results at page #{@cur_page} of #{@pages}")
-            sys.puts(sys.inspect(results))
+            #sys.puts(sys.inspect(results))
 
             next_cb()
 
@@ -70,25 +72,30 @@ class App
                     console.log("downloading #{photo.url_m}")
                     
                     match = regex.exec(photo.url_m)
-                    hostname = match[1]
-                    path = '/' + match[2]
- 
-                    download_cb = (photo) =>
-                        command = "convert #{@options.imgdir}/#{photo.id}.jpg #{@options.tmpdir}/#{photo.id}.pgm"
-                        exec(command, (error, stdout, stderr) =>
-                            if (error?)
-                                console.log('exec error: ' + error)
-                            else
-                                command = "./bin/extract_features_64bit.ln -hesaff -sift -i #{@options.tmpdir}/#{photo.id}.pgm -o1 #{@options.feadir}/#{photo.id}.hes"
+
+                    if (match?)
+
+                        hostname = match[1]
+                        path = '/' + match[2]
                         
+                        download_cb = (photo) =>
+                            command = "convert #{@options.imgdir}/#{photo.id}.jpg #{@options.tmpdir}/#{photo.id}.pgm"
+                            exec(command, (error, stdout, stderr) =>
+                                if (error?)
+                                    console.log('exec error: ' + error)
+                        
+                                command = "./bin/extract_features_64bit.ln -hesaff -sift -i #{@options.tmpdir}/#{photo.id}.pgm -o1 #{@options.feadir}/#{photo.id}.hes"
+                            
                                 exec(command, (error, stdout, stderr) =>
                                     if (error?) 
                                         console.log('exec error: ' + error);
                                     download()
                                 )
-                        )
-                    
-                    download_img(photo, hostname, path, download_cb)
+                            )
+                        
+                        download_img(photo, hostname, path, download_cb)
+                    else
+                        download()
                 else
                     next_cb()
 
@@ -138,7 +145,7 @@ class App
                         photo = photos.pop()
                         if (photo?)
                             photo.random = Math.random()
-                            collection.insert(photo, {safe:true}, (err, result) ->
+                            collection.update({id: photo.id}, photo, {safe:true, upsert: true}, (err, result) ->
                                 assert.equal(null, err)
                                 count++
                                 push_photo()

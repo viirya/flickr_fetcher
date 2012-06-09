@@ -16,13 +16,18 @@ class Flickr_Fetcher
     search: (callback) ->
 
         search_args =
-            tags: @options.keyword
             extras: 'url_m,description,geo,tags,date_upload,date_taken'
 
+        if (@options.keyword?)
+            search_args.tags = @options.keyword
         if (@options.page?)
             search_args.page = @options.page
         if (@options.bbox?)
             search_args.bbox = @options.bbox
+        if (@options.mindate)
+            search_args.min_taken_date = Math.round(new Date(@options.mindate).getTime() / 1000)
+        if (@options.maxdate)
+            search_args.max_taken_date = Math.round(new Date(@options.maxdate).getTime() / 1000)
 
         console.log(search_args)
 

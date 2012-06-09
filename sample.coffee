@@ -5,13 +5,12 @@ cli = require('cli')
 App = require('./lib/sample').App
 
 options = cli.parse
-    imgdir: ['i', 'The image store path', 'string'],
+    numcluter: ['k', 'The number of clusters', 'number', 64],
     feadir: ['f', 'The image feature store path', 'string'],
-    tmpdir: ['m', 'The tmporary path', 'string'],
-    keyword: ['t', 'The keywords to search for flickr', 'string'],
-    collection: ['c', 'The database collection', 'string']
-    location: ['l', 'The location to search photos from', 'string'],
-    page: ['p', 'The starting page', 'number', 1]
+    collection: ['c', 'The database collection', 'string'],
+    outfile: ['o', 'The normalization output file', 'string'],
+    sampleoutfile: ['d', 'The direct sample output file', 'string'],
+    samplenum: ['s', 'The sample number', 'number', 50]
 
 app = new App(conf.mongodb, options)
 app.init(() ->
