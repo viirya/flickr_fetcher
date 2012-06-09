@@ -60,5 +60,5 @@ def cluster(features, k, output_filename):
  
 features = load_features(args.f)
 features = normalize(args.o, features)
-centroids = cluster(features, args.k, args.o)
+centroids = cluster(features, int(args.k), args.o)
 
