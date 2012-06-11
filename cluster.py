@@ -2,7 +2,7 @@
 import sys
 import argparse
 
-from numpy import array, zeros, mean, std, subtract, divide
+from numpy import array, zeros, mean, std, subtract, divide, dot, sqrt
 from scipy.cluster.vq import vq, kmeans, whiten
 
 
@@ -20,7 +20,9 @@ def load_features(filename):
     f = open(filename, 'r')
     content = []
     for line in f:
-        content.append(map(float, line.split()))
+        vec = map(float, line.split())
+        norm_vec = sqrt(dot(vec, vec)) 
+        content.append(divide(vec, norm_vec))
 
     f.close()
 
@@ -50,9 +52,12 @@ def normalize(output_filename, features):
 
 def cluster(features, k, output_filename):
 
-    centroids = kmeans(features, k)
+    (centroids, distortion) = kmeans(features, k)
     f = open(output_filename, 'w')
-    centroids.tofile(f, sep = " ")
+    print(centroids)
+    for vec in centroids:
+        vec.tofile(f, sep = " ")
+        f.write("\n")        
     f.close()
 
     return centroids
