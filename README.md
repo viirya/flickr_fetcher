@@ -34,12 +34,19 @@ In addition to "output file", another file "output file" + ".meta" will be creat
 For example:
 	python cluster.py -f test.clu -o sample.kmean -k 64
 
-### Encoding raw image features to VLAD (vector of locally aggregated descriptors) feature
+### Encoding raw image features as VLAD (vector of locally aggregated descriptors) feature
 
 	python vlad_encoder.py -c <codebook filename> -n <codebook meta filename> -f <raw feature filename> -o <output filename>
 	
 For example:
 	python vlad_encoder.py -c flickr_sample_500.k_16 -n flickr_sample_500.k_16.meta -f features.hes -o features.vlad
+
+### Encoding all images in database collection as VLAD features
+
+	vlad.coffee -c <database collection> -f <raw feature path> -v <vlad path> -b <codebook filename> -m <codebook meta filename>
+
+For example:
+	vlad.coffee -c paris -f ./features -v ./vlad -b flickr_sample_500.k_16 -m flickr_sample_500.k_16.meta
 
 	
 	
