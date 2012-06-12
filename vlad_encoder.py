@@ -71,7 +71,7 @@ def vlad_encoding(features, codebook):
     vlad = zeros(codebook.shape)
     for idx in range(codes.size):
         diff = subtract(features[idx], codebook[codes[idx]])
-        vlad[codes[idx]] = add(diff, codes[idx])
+        vlad[codes[idx]] = add(diff, vlad[codes[idx]])
 
 
     return vlad
