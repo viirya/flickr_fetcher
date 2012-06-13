@@ -12,11 +12,55 @@ exec = require('child_process').exec
 Callback = require('./callback').Callback
 MongoDatabase = require('./mongo').MongoDatabase
 
-class VladEncoder
+class VladEncoderSource
+
+    constructor: (@options)
+
+    sample: () ->
+ 
+
+class VladEncoderSourceList extends VladEncoderSource
+
+    constructor: (@options) ->
+
+    sample: (cb) ->
+
+        readStream = fs.createReadStream("#{@options.listfile}")
+        readStream.on('error', (err) =>
+            console.log(err)
+        )
+        photos = []
+        count = 0
+        new lazy(readStream)
+            .lines
+            .forEach((line) =>
+
+                line = line.toString()
+                photos.push({id: line})
+                count++
+
+            ).on('end', =>
+                console.log("Total #{count} photos")
+                cb(photos)
+            )
+        
+ 
+
+class VladEncoderSourceDir extends VladEncoderSource
 
     constructor: (@options, @db_config) ->
 
-    sample: (callback) ->
+    sample: (cb) ->
+
+        fs.readdir(@options.feadir, (err, files) ->
+
+        ) 
+
+class VladEncoderSourceDB extends VladEncoderSource
+ 
+    constructor: (@options, @db_config) ->
+
+    sample: (cb) ->
             if (@options.collection?)
                 @db_config.collection = @options.collection
 
@@ -40,10 +84,19 @@ class VladEncoder
 
                     stream.on("end", ->
                         console.log("Total: #{count} photos")
-                        callback(photos)
+                        cb(photos)
                     )
 
                 )
+ 
+
+ 
+class VladEncoder
+
+    constructor: () ->
+
+    sample: (source, callback) ->
+        results = source.sample(callback)
 
 class App
 
@@ -52,7 +105,7 @@ class App
     init: (cb) ->
         cb()
 
-    run: ->
+    run: (source) ->
 
         invoke_vlad_encoder_cb = (results, next_cb) =>
 
@@ -87,8 +140,12 @@ class App
         @last = new Callback(last_cb)
         @jobs = new Callback(invoke_vlad_encoder_cb, @last)
  
-        @sampler = new VladEncoder(@options, @db_config)
-        @sampler.sample(@jobs.expose_cb())
+        @sampler = new VladEncoder()
+        @sampler.sample(source, @jobs.expose_cb())
 
 exports.App = App
+exports.VladEncoderSource = VladEncoderSource
+exports.VladEncoderSourceDB = VladEncoderSourceDB
+exports.VladEncoderSourceList = VladEncoderSourceList
+
 

@@ -3,17 +3,17 @@ conf = require('./config')
 
 cli = require('cli')
 App = require('./lib/vlad').App
-VladEncoderSourceDB = require('./lib/vlad').VladEncoderSourceDB
+VladEncoderSourceList = require('./lib/vlad').VladEncoderSourceList
 
 options = cli.parse
     feadir: ['f', 'The image feature store path', 'string'],
-    collection: ['c', 'The database collection', 'string'],
+    listfile: ['l', 'The photo id list filename', 'string'],
     vladdir: ['v', 'The vlad feature path', 'string'],
     codebook: ['b', 'The codebook filename', 'string'],
     metafile: ['m', 'The codebook meta filename', 'string']
 
 app = new App(conf.mongodb, options)
 app.init(() ->
-    app.run(new VladEncoderSourceDB(options, conf.mongodb))
+    app.run(new VladEncoderSourceList(options, conf.mongodb))
 )
 
