@@ -13,10 +13,10 @@ Since `flickrnode` module can not be installed by npm, you shoule git clone it i
 
 ### Search Flickr photos
 
-	coffee query.coffee -t <query term> -i <image download path> -f <feature storing path> -m <image processing path> -l <geolocation> -c <database collection>
+	coffee query.coffee -t <query term> -i <image download path> -f <feature storing path> -m <image processing path> -l <geolocation> -c <database collection>  -n <from datetime> -a <to datetime>
 
 For example:
-	coffee query.coffee -t paris -i ./test -f ./feature -m ./tmp -l 'Paris, France' -c paris
+	coffee query.coffee -t paris -i ./test -f ./feature -m ./tmp -l 'Paris, France' -c paris -n "2012/4/1" -a "2012/4/5"
 
 ### Sample photos from fetched Flickr photos
 
@@ -57,11 +57,16 @@ For example:
 	
 ### Validating VLAD feature performance
 
-	python vlad_validate_distance.py -d <vlad feature path> -q <query list file>
+	python vlad_validate_distance.py -d <vlad feature path> -q <query list file> -g <groundtruth filename>
 
 For example:
-	python vlad_validate_distance.py -d ./vlad -q query.txt
+	python vlad_validate_distance.py -d ./vlad -q query.txt -g ground_truth.txt
 
-	
-	
+### Generating pairwise distance matrix for images
+
+	python vlad_pairwise_distance.py -d <vlad feature path> -o <out>
+
+For example:
+	python vlad_pairwise_distance.py -d /project/project-mira3/flickr_geo_photos/paris/vlad -o paris_7910.distance
+
 	
