@@ -94,7 +94,9 @@ def write_out_vlad_matrix(photos, filename):
     f = open(filename, 'w')
  
     for photo_id, feature in photos.iteritems():
-        f.write(photo_id + "\t" + feature)
+        f.write(photo_id + "\t")
+        feature.tofile(f, sep = " ")
+        f.write("\n")
 
     f.close() 
 
