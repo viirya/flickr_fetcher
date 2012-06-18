@@ -18,3 +18,11 @@ data_cluster <- function(dataset) {
     return (apresult)
 }
 
+arg <- commandArgs(trailingOnly = TRUE)
+argLen <- length(arg)
+if (argLen == 1) {
+    arg <- arg[argLen]
+    print(paste("Clusering ", arg, " dataset...", sep = ''))
+    data_cluster(arg)
+}
+
