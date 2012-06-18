@@ -64,9 +64,32 @@ For example:
 
 ### Generating pairwise distance matrix for images
 
-	python vlad_pairwise_distance.py -d <vlad feature path> -o <out>
+	python vlad_pairwise_distance.py -d <vlad feature path> -o <output filename>
 
 For example:
-	python vlad_pairwise_distance.py -d /project/project-mira3/flickr_geo_photos/paris/vlad -o paris_7910.distance
+	python vlad_pairwise_distance.py -d ./vlad -o paris_7910.distance
+
+### Generating vlad feature matrix for images
+
+	python vlad_data_matrix.py -d <vlad feature path> -o <outout filename>
+
+For example:
+	python vlad_data_matrix.py -d ./vlad -o paris_7910.data
+
+### Clustering flickr images using Affinity Propagation algorithm
+
+	# Running R interaction envrionment
+	> source("apc_cluster.R")
+	> data_cluster("paris_7910.data") # given the vlad feature matrix
+
+	# Or under command line
+	R --slave --args paris_7910 < apc_cluster.R
+
+4 files will be generated under current path. Use "paris_7910.data" as example:
+
+* paris_7910.apc: Binary stored APResult object of APCluster package.
+* paris_7910.apc.clusters: Text-format cluster list.
+* paris_7910.apc.exemplars: Text-format exemplar list.
+* paris_7910.apc.similarity: Negative squared distances (Euclidean) matrix.
 
 	
