@@ -4,9 +4,10 @@ data_cluster <- function(dataset) {
 
     dataMatrix <- read.table(paste(dataset, ".data", sep = ''), row.names = 1)
     simMatrix <- negDistMat(dataMatrix)
-
     apresult <- apcluster(simMatrix)
+
     save(apresult, file = paste(dataset, ".apc", sep = ''))
+    write.table(simMatrix, file = paste(dataset, ".apc.similarity", sep = ''))
 
     exemplars <- apresult@exemplars
     clusters <- apresult@clusters
