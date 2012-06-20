@@ -92,4 +92,13 @@ For example:
 * paris_7910.apc.exemplars: Text-format exemplar list.
 * paris_7910.apc.similarity: Negative squared distances (Euclidean) matrix.
 
-	
+### Browsing clustering results
+
+	coffee app.coffee -i <image base path> -a <apc cluster list filename> -c <image set sub-path under image base path>
+
+For example:
+
+	coffee app.coffee -i /images -a ./paris_7910.apc.clusters -c paris
+
+A node.js application will be running at port 3000. Open browser to see the clustering results at a URL such as http://localhost:3000/
+
