@@ -1,0 +1,20 @@
+!!!5
+html
+  head
+    title Browsing Clustering Results
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    header
+      h1 APC Results
+    .container
+      .main-content
+        block content
+    footer
+  script(src='/javascript/jquery-1.7.2.min.js', type='text/javascript')
+  script(src='/javascript/jquery.lazyload.min.js', type='text/javascript')
+  script(src='/javascript/jquery.scrollstop.min.js', type='text/javascript')
+  script(type='text/javascript', charset='utf-8')
+    $(function() {
+        $("img").lazyload();
+    });
+   

@@ -1,0 +1,10 @@
+extends layout
+block content
+  each cluster, idx in clusters
+    if cluster.member.length > 20
+        h2 cluster #{idx}
+        div.cluster
+          img.resize.exemplar(src='#{imgpath}/grey.gif', data-original='#{imgpath}/#{photoset}/#{cluster.exemplar}.jpg')
+          each mem in cluster.member
+            img.resize(src='#{imgpath}/grey.gif', data-original='#{imgpath}/#{photoset}/#{mem}.jpg')
+ 
