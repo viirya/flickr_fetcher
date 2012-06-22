@@ -16,7 +16,7 @@ class Flickr_Fetcher
     search: (callback) ->
 
         search_args =
-            extras: 'url_m,description,geo,tags,date_upload,date_taken'
+            extras: 'url_m,description,geo,tags,date_upload,date_taken,views'
 
         if (@options.keyword?)
             search_args.tags = @options.keyword
@@ -24,6 +24,8 @@ class Flickr_Fetcher
             search_args.page = @options.page
         if (@options.bbox?)
             search_args.bbox = @options.bbox
+        if (@options.sort?)
+            search_args.sort = @options.sort
         if (@options.mindate)
             search_args.min_taken_date = Math.round(new Date(@options.mindate).getTime() / 1000)
         if (@options.maxdate)

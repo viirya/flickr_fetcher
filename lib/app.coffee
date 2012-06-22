@@ -135,17 +135,24 @@ class App
                 console.log("Connecting database")
                 mongodb = new MongoDatabase(@db_config)
                 mongodb.init()
-                mongodb.operate((collection) ->
+                mongodb.operate((collection) =>
 
                     console.log("Begin to store photo information into database")
 
                     photos = results.photo.slice(0)
                     count = 0
-                    push_photo = ->
+                    push_photo = =>
                         photo = photos.pop()
                         if (photo?)
                             photo.random = Math.random()
-                            collection.update({id: photo.id}, photo, {safe:true, upsert: true}, (err, result) ->
+
+                            if (@options.sort?)
+                                if (@options.sort == "interestingness-desc")
+                                    photo.interestingness = (@pages - @cur_page + 1) * 250 + (250 - count)  
+                                else if (@options.sort == "interestingness-asc")
+                                    photo.interestingness = @cur_page * 250 + count
+
+                            collection.update({id: photo.id}, photo, {safe:true, upsert: true}, (err, result) =>
                                 assert.equal(null, err)
                                 count++
                                 push_photo()

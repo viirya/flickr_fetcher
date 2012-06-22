@@ -32,6 +32,40 @@ def list_files(dirname):
 
     return photos
 
+
+def load_clustering(filename):
+
+    f = open(filename, 'r')
+
+    clusters = []
+    cur_cluster = {}
+
+    for line in f:
+
+        m = re.search('\"x\"', line)
+        if m != None:
+            if cur_cluster != {}:
+                clusters.append(cur_cluster)
+
+            cur_cluster = {}
+
+        m = re.search('\"(.*?)\" .*', line)
+        if m != None:
+            if "exemplar" in cur_cluster:
+                if "member" not in cur_cluster:
+                    cur_cluster["member"] = []
+                cur_cluster["member"].append(m.group(1))
+            else:
+                cur_cluster["exemplar"] = m.group(1)
+                cur_cluster["member"] = []
+
+    if cur_cluster != {}:
+        clusters.append(cur_cluster)
+
+    f.close()
+    return clusters
+
+
 def load_list(filename):
     f = open(filename, 'r')
     content = []
@@ -100,6 +134,23 @@ def write_out_vlad_matrix(photos, filename):
 
     f.close() 
 
+def write_out_vlad_matrix_libsvm_format(photos, filename, cluster = {}):
+
+    f = open(filename, 'w')
+ 
+    for photo_id, feature in photos.iteritems():
+        if cluster == {} or (photo_id == cluster["exemplar"] or photo_id in cluster["member"]):
+            f.write(photo_id + " ")
+            it = feature.flat
+            features = ""
+            for idx, val in enumerate(it):
+                if features != "":
+                    features = features + " "
+                features = features + str(idx) + ":" + str(val)
+            f.write(features + "\n")  
+
+    f.close() 
+ 
 def write_out_distance(distance, filename):
 
     f = open(filename, 'w')
