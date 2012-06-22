@@ -102,3 +102,12 @@ For example:
 
 A node.js application will be running at port 3000. Open browser to see the clustering results at a URL such as http://localhost:3000/
 
+### Generating vlad features for each APC cluster in libsvm format.
+
+	python vlad_data_matrix_for_clusters.py -d <vlad feature path> -c <apc cluster list filename> -o <output path and filename prefix>
+
+For example:
+
+	python vlad_data_matrix_for_clusters.py -d ./vlad -c paris_7910.apc.clusters -o ./clusters_vlad/cluster_data
+	
+The files ./clusters_vlad/cluster_data.cluster.[0 ~ (clusters_number -1)] will be generated. Each file contains vlad features for photos in the corresponding APC cluster.
