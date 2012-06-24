@@ -4,7 +4,7 @@ import argparse
 import re
 import os
 
-from numpy import array, zeros, mean, std, sort, add, subtract, divide, dot, sqrt
+from numpy import array, zeros, mean, std, sort, add, subtract, divide, dot, sqrt, arange, random
 from numpy import linalg as la
 from scipy.cluster.vq import vq, kmeans, whiten
 
@@ -122,6 +122,30 @@ def validate(distance, query, groundtruth):
     map_value /= query.size
 
     return (ap, map_value)
+
+def random_sample_photos(photos, num):
+
+    photo_ids = photos.keys()
+    random.shuffle(photo_ids)
+
+    part = len(photo_ids) / num
+
+    samples = []    
+    for idx in range(num):
+        start_idx = idx * part
+        end_idx = (idx + 1) * part
+
+        if idx == num - 1:
+            end_idx = len(photo_ids)
+
+        photo_set = {}
+        for hash_key in range(start_idx, end_idx):
+            photo_set[photo_ids[hash_key]] = photos[photo_ids[hash_key]]
+
+        samples.append(photo_set)
+    
+    return samples
+
 
 def write_out_vlad_matrix(photos, filename):
 
