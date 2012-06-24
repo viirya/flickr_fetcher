@@ -71,10 +71,13 @@ For example:
 
 ### Generating vlad feature matrix for images
 
-	python vlad_data_matrix.py -d <vlad feature path> -o <outout filename>
+	python vlad_data_matrix.py -d <vlad feature path> -o <outout filename> -s <optional sample number> -f <optional output format>
+
+The output format could be 'libsvm'. If not given, the output format is simply the arraies of vlad features.
+The sample number could be set to generate specified numbers of parts of the data.
 
 For example:
-	python vlad_data_matrix.py -d ./vlad -o paris_7910.data
+	python vlad_data_matrix.py -d ./vlad -o paris_7910.data -f libsvm
 
 ### Clustering flickr images using Affinity Propagation algorithm
 
