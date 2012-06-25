@@ -117,11 +117,11 @@ A node.js application will be running at port 3000. Open browser to see the clus
 
 ### Generating vlad features for each APC cluster in libsvm format.
 
-	python vlad_data_matrix_for_clusters.py -d <vlad feature path> -c <apc cluster list filename> -o <output path and filename prefix>
+	python vlad_data_matrix_for_clusters.py -d <vlad feature path> -c <apc cluster list filename> -o <output path and filename prefix> -t <threshold for cluster size>
 
 For example:
 
-	python vlad_data_matrix_for_clusters.py -d ./vlad -c paris_7910.apc.clusters -o ./clusters_vlad/cluster_data
+	python vlad_data_matrix_for_clusters.py -d ./vlad -c paris_7910.apc.clusters -o ./clusters_vlad/cluster_data -t 5
 	
 The files ./clusters_vlad/cluster_data.cluster.[0 ~ (clusters_number -1)] will be generated. Each file contains vlad features for photos in the corresponding APC cluster.
 
