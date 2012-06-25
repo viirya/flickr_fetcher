@@ -9,8 +9,13 @@ COUNT=0
 for f in $FILES  # model files
 do
     echo $f
-    ./libsvm-3.12/svm-predict $2 $f $2.output.$COUNT  
-    mv $2.output.$COUNT $3/.
-    COUNT=$(($COUNT+1))
+    if [[ "$f" =~ .*[0-9]\.model ]]
+    then
+        FILENUM=$(echo "$f" | sed 's/.*\.\([0-9]*\)\.model/\1/')
+        echo $FILENUM
+        ./libsvm-3.12/svm-predict $2 $f $2.output.$FILENUM  
+        mv $2.output.$FILENUM $3/.
+        COUNT=$(($COUNT+1))
+    fi
 done
 
