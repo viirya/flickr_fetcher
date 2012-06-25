@@ -136,6 +136,7 @@ class App
             invoke_encoder()
 
         last_cb = (results, next_cb) =>
+            process.exit()
 
         @last = new Callback(last_cb)
         @jobs = new Callback(invoke_vlad_encoder_cb, @last)

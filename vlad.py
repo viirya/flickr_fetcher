@@ -158,13 +158,20 @@ def write_out_vlad_matrix(photos, filename):
 
     f.close() 
 
-def write_out_vlad_matrix_libsvm_format(photos, filename, cluster = {}):
+def write_out_vlad_matrix_libsvm_format(photos, filename, cluster = {}, label = ''):
 
     f = open(filename, 'w')
  
     for photo_id, feature in photos.iteritems():
         if cluster == {} or (photo_id == cluster["exemplar"] or photo_id in cluster["member"]):
-            f.write(photo_id + " ")
+
+            if label == '':
+                f.write(photo_id + " ")
+            elif label == 'positive' or label == 1:
+                f.write("1 ")
+            else:
+                f.write("-1 ")
+
             it = feature.flat
             features = ""
             for idx, val in enumerate(it):
