@@ -71,13 +71,14 @@ For example:
 
 ### Generating vlad feature matrix for images
 
-	python vlad_data_matrix.py -d <vlad feature path> -o <outout filename> -s <optional sample number> -f <optional output format>
+	python vlad_data_matrix.py -d <vlad feature path> -o <outout filename> -s <optional sample number> -f <optional output format> -l <optional data label>
 
 The output format could be 'libsvm'. If not given, the output format is simply the arraies of vlad features.
 The sample number could be set to generate specified numbers of parts of the data.
+The data label could be set to generate '1' or '-1' label in output file of libsvm format.
 
 For example:
-	python vlad_data_matrix.py -d ./vlad -o paris_7910.data -f libsvm
+	python vlad_data_matrix.py -d ./vlad -o paris_7910.data -f libsvm -l positive
 
 ### Clustering flickr images using Affinity Propagation algorithm
 
@@ -114,3 +115,15 @@ For example:
 	python vlad_data_matrix_for_clusters.py -d ./vlad -c paris_7910.apc.clusters -o ./clusters_vlad/cluster_data
 	
 The files ./clusters_vlad/cluster_data.cluster.[0 ~ (clusters_number -1)] will be generated. Each file contains vlad features for photos in the corresponding APC cluster.
+
+### The bash script used to train models and test data
+
+	sh train_model.sh <training data path> <model output path>
+	sh test_model.sh <model path> <test data> <classification result output path>
+
+### The bash script used to create the directionary structure for dataset
+
+	sh create_dataset.sh <base path> <dataset name>
+
+
+
