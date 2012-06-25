@@ -16,6 +16,7 @@ Since `flickrnode` module can not be installed by npm, you shoule git clone it i
 	coffee query.coffee -t <query term> -i <image download path> -f <feature storing path> -m <image processing path> -l <geolocation> -c <database collection>  -n <from datetime> -a <to datetime>
 
 For example:
+
 	coffee query.coffee -t paris -i ./test -f ./feature -m ./tmp -l 'Paris, France' -c paris -n "2012/4/1" -a "2012/4/5"
 
 ### Sample photos from fetched Flickr photos
@@ -23,6 +24,7 @@ For example:
 	sample.coffee -c <database collection> -f <feature storing path> -d <output file> -s <sample number>
 	
 For example:
+
 	sample.coffee -c paris -f ./features -d test.clu -s 1000
 	
 ### Clustering of sampled photos
@@ -32,6 +34,7 @@ For example:
 In addition to "output file", another file "output file" + ".meta" will be created that contains mean and std feature vector of sampled features.
 	
 For example:
+
 	python cluster.py -f test.clu -o sample.kmean -k 64
 
 ### Encoding raw image features as VLAD (vector of locally aggregated descriptors) feature
@@ -39,6 +42,7 @@ For example:
 	python vlad_encoder.py -c <codebook filename> -n <codebook metadata filename> -f <raw feature filename> -o <output filename>
 	
 For example:
+
 	python vlad_encoder.py -c flickr_sample_500.k_16 -n flickr_sample_500.k_16.meta -f features.hes -o features.vlad
 
 ### Encoding all images in database collection as VLAD features
@@ -46,6 +50,7 @@ For example:
 	coffee vlad.coffee -c <database collection> -f <raw feature path> -v <vlad path> -b <codebook filename> -m <codebook metadata filename>
 
 For example:
+
 	coffee vlad.coffee -c paris -f ./features -v ./vlad -b flickr_sample_500.k_16 -m flickr_sample_500.k_16.meta
 
 ### Encoding all images in a specified list as VLAD features
@@ -53,6 +58,7 @@ For example:
 	coffee vlad_from_filelist.coffee -l <image list file> -f <raw feature path> -v <vlad storing path> -b <codebook> -m <codebook metadata filename>
 
 For example:
+
 	coffee vlad_from_filelist.coffee -l image_list.txt -f ./features -v ./vlad -b flickr_sample_500.k_16 -m flickr_sample_500.k_16.meta
 	
 ### Validating VLAD feature performance
@@ -60,6 +66,7 @@ For example:
 	python vlad_validate_distance.py -d <vlad feature path> -q <query list file> -g <groundtruth filename>
 
 For example:
+
 	python vlad_validate_distance.py -d ./vlad -q query.txt -g ground_truth.txt
 
 ### Generating pairwise distance matrix for images
@@ -67,6 +74,7 @@ For example:
 	python vlad_pairwise_distance.py -d <vlad feature path> -o <output filename>
 
 For example:
+
 	python vlad_pairwise_distance.py -d ./vlad -o paris_7910.distance
 
 ### Generating vlad feature matrix for images
@@ -78,6 +86,7 @@ The sample number could be set to generate specified numbers of parts of the dat
 The data label could be set to generate '1' or '-1' label in output file of libsvm format.
 
 For example:
+
 	python vlad_data_matrix.py -d ./vlad -o paris_7910.data -f libsvm -l positive
 
 ### Clustering flickr images using Affinity Propagation algorithm
@@ -118,12 +127,18 @@ The files ./clusters_vlad/cluster_data.cluster.[0 ~ (clusters_number -1)] will b
 
 ### The bash script used to train models and test data
 
-	sh train_model.sh <training data path> <model output path>
-	sh test_model.sh <model path> <test data> <classification result output path>
+	./train_model.sh <training data path> <model output path>
+	./test_model.sh <model path> <test data> <classification result output path>
 
 ### The bash script used to create the directionary structure for dataset
 
-	sh create_dataset.sh <base path> <dataset name>
+	./create_dataset.sh <base path> <dataset name>
 
+### 
 
+	coffee svm_state.coffee -r <svm testing result path> -g <calculating statistics for positive or negative>
+
+For example:
+
+	coffee svm_state.coffee -r ./classification -g positive
 
