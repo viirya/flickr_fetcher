@@ -165,6 +165,16 @@ class App
                 )
 
         last_cb = (results, next_cb) =>
+            if (!@options.org_page?)
+                if (@options.page?)
+                    @options.org_page = @options.page
+                else
+                    @options.org_page = @cur_page
+
+            if (@options.totalpage?)
+                if ((@cur_page - @options.org_page) >= @options.totalpage)
+                    process.exit()
+
             if (@cur_page < @pages)
                 @options.page = @cur_page + 1
 
@@ -172,6 +182,8 @@ class App
 
                 @fetcher.init(@options)
                 @fetcher.search(@show.expose_cb())
+            else
+                process.exit()
 
         @last = new Callback(last_cb)
         @store = new Callback(store_cb, @last)

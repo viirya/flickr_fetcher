@@ -14,6 +14,7 @@ options = cli.parse
     maxdate: ['a', 'The max_taken_date of flickr search parameter', 'string'],
     location: ['l', 'The location to search photos from', 'string'],
     page: ['p', 'The starting page', 'number', 1],
+    totalpage: ['o', 'The total pages to download', 'number'],
     sort: ['s', 'The order of returned photos.', 'string']
 
 app = new App(conf.flickr_apikey, conf.mongodb)

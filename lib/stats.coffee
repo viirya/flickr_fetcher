@@ -49,6 +49,7 @@ class StatisticSourceDir extends StatisticSource
 
         fs.readdir(@options.resultdir, (err, files) =>
 
+            precision_results = []
             process = =>
                 console.log("processing")
                 file = files.pop()
@@ -57,10 +58,11 @@ class StatisticSourceDir extends StatisticSource
                     console.log("mode: #{file}")
                     @process_file(full_path, (precision) =>
                         console.log("#{precision}")
+                        precision_results.push(precision)
                         process()
                     )
                 else
-                    cb()
+                    cb(precision_results)
 
             process()
         ) 
@@ -84,6 +86,13 @@ class App
         invoke_performer_cb = (results, next_cb) =>
 
             invoke_performer = =>
+                console.log(results)
+                precision = 0
+                results.forEach((element) ->
+                    precision += element 
+                )
+                precision = precision / results.length
+                console.log("Avg precision: #{precision}")
                 next_cb()
 
             invoke_performer()
