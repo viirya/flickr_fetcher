@@ -142,3 +142,13 @@ For example:
 
 	coffee svm_state.coffee -r ./classification -g positive
 
+### Broswing fetched photos
+
+	coffee image.coffee -i <image base path under public> -c <image relative path under image base path>
+	
+For example:
+
+	coffee image.coffee -i images -c test
+
+
+
