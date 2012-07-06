@@ -80,13 +80,13 @@ class App
                         
                         download_cb = (photo) =>
                             command = "convert #{@options.imgdir}/#{photo.id}.jpg #{@options.tmpdir}/#{photo.id}.pgm"
-                            exec(command, (error, stdout, stderr) =>
+                            exec(command, {timeout: 10000}, (error, stdout, stderr) =>
                                 if (error?)
                                     console.log('exec error: ' + error)
                         
                                 command = "./bin/extract_features_64bit.ln -hesaff -sift -i #{@options.tmpdir}/#{photo.id}.pgm -o1 #{@options.feadir}/#{photo.id}.hes"
                             
-                                exec(command, (error, stdout, stderr) =>
+                                exec(command, {timeout: 10000}, (error, stdout, stderr) =>
                                     if (error?) 
                                         console.log('exec error: ' + error);
                                     download()
