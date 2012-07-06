@@ -13,11 +13,11 @@ Since `flickrnode` module can not be installed by npm, you shoule git clone it i
 
 ### Search Flickr photos
 
-	coffee query.coffee -t <query term> -i <image download path> -f <feature storing path> -m <image processing path> -l <geolocation> -c <database collection>  -n <from datetime> -a <to datetime>
+	coffee query.coffee -t <query term> -i <image download path> -f <feature storing path> -m <image processing path> -l <geolocation> -c <database collection>  -n <from datetime> -a <to datetime> -p <starting page> -o <total pages> -s <sorting option>
 
 For example:
 
-	coffee query.coffee -t paris -i ./test -f ./feature -m ./tmp -l 'Paris, France' -c paris -n "2012/4/1" -a "2012/4/5"
+	coffee query.coffee -t paris -i ./test -f ./feature -m ./tmp -l 'Paris, France' -c paris -n "2012/4/1" -a "2012/4/5" -p 1 -o 2 -s interestingness-desc
 
 ### Sample photos from fetched Flickr photos
 
