@@ -150,5 +150,13 @@ For example:
 
 	coffee image.coffee -i images -c test
 
+### Generate crowdsourcing dataset file
 
+	python crowdsourcing.py -d <image path> -o <output file> -n <number of sampled images> -u <image prefix> -m <file output mode {w|a}>
+	
+For example:
+
+	python crowdsourcing.py -d ./images -o crowd.txt -n 10 -u "http://testurl/images/" -m w
+	
+	
 
