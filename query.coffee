@@ -15,7 +15,8 @@ options = cli.parse
     location: ['l', 'The location to search photos from', 'string'],
     page: ['p', 'The starting page', 'number', 1],
     totalpage: ['o', 'The total pages to download', 'number'],
-    sort: ['s', 'The order of returned photos.', 'string']
+    sort: ['s', 'The order of returned photos.', 'string'],
+    userid: ['u', 'The Flickr user NSID.', 'string']
 
 app = new App(conf.flickr_apikey, conf.mongodb)
 app.init(options, () ->

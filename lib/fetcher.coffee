@@ -16,8 +16,10 @@ class Flickr_Fetcher
     search: (callback) ->
 
         search_args =
-            extras: 'url_m,description,geo,tags,date_upload,date_taken,views'
+            extras: 'url_m,url_o,url_l,url_z,url_n,url_q,url_c,description,geo,tags,date_upload,date_taken,views'
 
+        if (@options.userid?)
+            search_args.user_id = @options.userid
         if (@options.keyword?)
             search_args.tags = @options.keyword
         if (@options.page?)
@@ -30,6 +32,8 @@ class Flickr_Fetcher
             search_args.min_taken_date = Math.round(new Date(@options.mindate).getTime() / 1000)
         if (@options.maxdate)
             search_args.max_taken_date = Math.round(new Date(@options.maxdate).getTime() / 1000)
+
+        search_args.tag_mode = 'all'
 
         console.log(search_args)
 

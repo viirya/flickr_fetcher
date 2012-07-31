@@ -7,89 +7,40 @@ http = require('http')
 fs = require('fs')
 exec = require('child_process').exec
 
-Flickr_Fetcher = require('./fetcher').Flickr_Fetcher
+Pinterest = require('./pinterest').Pinterest
 Callback = require('./callback').Callback
 MongoDatabase = require('./mongo').MongoDatabase
-Geo = require('./geo').Geo
 
 class App
 
-    constructor: (@flickr_apikey, @db_config) ->
+    constructor: (@db_config) ->
 
     init: (@options, cb) ->
-        @decodeLocation(cb)
-
-    decodeLocation: (cb) ->
-        if (@options.location?)
-            console.log("Decoding the geolocation of #{@options.location}")
-            @geo = new Geo
-            @geo.decode(@options.location, (data) =>
-                if (data.results[0].geometry?)
-                    console.log(data.results[0].geometry)
-
-                    @search_bbox =
-                        min_lng: data.results[0].geometry.viewport.southwest.lng
-                        min_lat: data.results[0].geometry.viewport.southwest.lat
-                        max_lng: data.results[0].geometry.viewport.northeast.lng
-                        max_lat: data.results[0].geometry.viewport.northeast.lat
-
-                    @search_bbox_string = "#{@search_bbox.min_lng},#{@search_bbox.min_lat},#{@search_bbox.max_lng},#{@search_bbox.max_lat}"
-
-                    console.log("Constructing flickr bbox search argument: #{@search_bbox_string}")
-                    @options.bbox = @search_bbox_string
-                    cb()
-                else
-                    console.log("Error in decoding geolocation")
-            ) 
-        else
-            cb()
+        unless (@options.page?)
+            @options.page = 1
+        cb()
 
     run: ->
 
         simple_cb = (results, next_cb) =>
-
-            if (results.pages? && !@pages?)
-                @pages =  results.pages
-        
-            @cur_page = results.page
-
-            console.log("Obtain search results at page #{@cur_page} of #{@pages}")
-            #sys.puts(sys.inspect(results))
-
+            @cur_page = @options.page
+            console.log(results)
             next_cb()
 
         parse_cb = (results, next_cb) =>
 
             regex = /http:\/\/(.*?)\/(.*)/
 
-            photos = results.photo.slice(0)
+            photos = results.slice(0)
 
             download = =>
                 
                 photo = photos.pop()
                 
                 if (photo?)
-
-                    url = ''
-
-                    if (photo.url_l?)
-                        url = photo.url_l
-                    else if (photo.url_z?)
-                        url = photo.url_z
-                    else if (photo.url_m?)
-                        url = photo.url_m
-                    else if (photo.url_o?)
-                        url = photo.url_o
-                    else if (photo.url_c?)
-                        url = photo.url_c
-                    else if (photo.url_n?)
-                        url = photo.url_n
-                    else if (photo.url_q?)
-                        url = photo.url_q
-
-                    console.log("downloading #{url}")
-
-                    match = regex.exec(url)
+                    console.log("downloading #{photo.image_url}")
+                    
+                    match = regex.exec(photo.image_url)
 
                     if (match?)
 
@@ -97,12 +48,12 @@ class App
                         path = '/' + match[2]
                         
                         download_cb = (photo) =>
-                            command = "convert #{@options.imgdir}/#{photo.id}.jpg #{@options.tmpdir}/#{photo.id}.pgm"
+                            command = "convert #{@options.imgdir}/#{photo.pin_id}.jpg #{@options.tmpdir}/#{photo.pin_id}.pgm"
                             exec(command, {timeout: 10000}, (error, stdout, stderr) =>
                                 if (error?)
                                     console.log('exec error: ' + error)
                         
-                                command = "./bin/extract_features_64bit.ln -hesaff -sift -i #{@options.tmpdir}/#{photo.id}.pgm -o1 #{@options.feadir}/#{photo.id}.hes"
+                                command = "./bin/extract_features_64bit.ln -hesaff -sift -i #{@options.tmpdir}/#{photo.pin_id}.pgm -o1 #{@options.feadir}/#{photo.pin_id}.hes"
                             
                                 exec(command, {timeout: 10000}, (error, stdout, stderr) =>
                                     if (error?) 
@@ -134,7 +85,7 @@ class App
                 )
                 
                 res.on('end', () =>
-                    fs.writeFile("#{@options.imgdir}/#{photo.id}.jpg", imagedata, 'binary', (err) =>
+                    fs.writeFile("#{@options.imgdir}/#{photo.pin_id}.jpg", imagedata, 'binary', (err) =>
                         if (err)
                             throw err
                         console.log('File saved.')
@@ -144,6 +95,7 @@ class App
                 )
 
             )
+
 
         store_cb = (results, next_cb) =>
             if (@options.collection?)
@@ -157,20 +109,14 @@ class App
 
                     console.log("Begin to store photo information into database")
 
-                    photos = results.photo.slice(0)
+                    photos = results.slice(0)
                     count = 0
                     push_photo = =>
                         photo = photos.pop()
                         if (photo?)
                             photo.random = Math.random()
 
-                            if (@options.sort?)
-                                if (@options.sort == "interestingness-desc")
-                                    photo.interestingness = (@pages - @cur_page + 1) * 250 + (250 - count)  
-                                else if (@options.sort == "interestingness-asc")
-                                    photo.interestingness = @cur_page * 250 + count
-
-                            collection.update({id: photo.id}, photo, {safe:true, upsert: true}, (err, result) =>
+                            collection.update({pin_id: photo.pin_id}, photo, {safe:true, upsert: true}, (err, result) =>
                                 assert.equal(null, err)
                                 count++
                                 push_photo()
@@ -190,16 +136,12 @@ class App
                     @options.org_page = @cur_page
 
             if (@options.totalpage?)
-                if ((@cur_page - @options.org_page) >= @options.totalpage)
+                if ((@cur_page - @options.org_page + 1) >= @options.totalpage)
                     process.exit()
-
-            if (@cur_page < @pages)
-                @options.page = @cur_page + 1
-
-                console.log("Continuing to search for page #{@options.page}")
-
-                @fetcher.init(@options)
-                @fetcher.search(@show.expose_cb())
+                else
+                    @options.page++
+                    @pinterest.set(@options)
+                    @pinterest.request(@show.expose_cb())
             else
                 process.exit()
 
@@ -207,10 +149,10 @@ class App
         @store = new Callback(store_cb, @last)
         @parse = new Callback(parse_cb, @store)
         @show = new Callback(simple_cb, @parse)   
- 
-        @fetcher = new Flickr_Fetcher(@flickr_apikey)
-        @fetcher.init(@options)
-        @fetcher.search(@show.expose_cb())
+
+        @pinterest = new Pinterest()
+        @pinterest.set(@options)
+        @pinterest.request(@show.expose_cb())
 
 exports.App = App
 
