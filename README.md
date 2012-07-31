@@ -13,7 +13,7 @@ Since `flickrnode` module can not be installed by npm, you shoule git clone it i
 
 ### Search Flickr photos
 
-	coffee query.coffee -t <query term> -i <image download path> -f <feature storing path> -m <image processing path> -l <geolocation> -c <database collection>  -n <from datetime> -a <to datetime> -p <starting page> -o <total pages> -s <sorting option>
+	coffee query.coffee -t <query term> -i <image download path> -f <feature storing path> -m <image processing path> -l <geolocation> -c <database collection>  -n <from datetime> -a <to datetime> -p <starting page> -o <total pages> -s <sorting option> -u <flickr user NSID>
 
 For example:
 
@@ -115,6 +115,14 @@ For example:
 
 A node.js application will be running at port 3000. Open browser to see the clustering results at a URL such as http://localhost:3000/
 
+### Browsing MapReduce clustering results
+
+	coffee apc_mapreduce.coffee -i <image base path> -a <apc cluster result pathname> -c <image set sub-path under image base path> -s <the threshold of cluster size>
+
+For example:
+
+	coffee apc_mapreduce.coffee -i /images -a ./output -c paris -s 20
+
 ### Generating vlad features for each APC cluster in libsvm format.
 
 	python vlad_data_matrix_for_clusters.py -d <vlad feature path> -c <apc cluster list filename> -o <output path and filename prefix> -t <threshold for cluster size>
@@ -158,5 +166,14 @@ For example:
 
 	python crowdsourcing.py -d ./images -o crowd.txt -n 10 -u "http://testurl/images/" -m w
 	
+### Crawling Pinterest images
+
+	coffee pinterest.coffee -i <image download path> -f <feature storing path> -m <image processing path> -c <database collection> -p <starting page> -o <total pages>
+	
+For example:
+
+	coffee pinterest.coffee -i ./images -f ./features -m ./tmp -c pinterest -p 1 -o 2
+	
+
 	
 
