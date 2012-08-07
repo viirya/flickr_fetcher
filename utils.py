@@ -6,7 +6,7 @@ import os
 
 from numpy import array, zeros, mean, std, sort, add, subtract, divide, dot, sqrt, arange, random
 from numpy import linalg as la
-from scipy.cluster.vq import vq, kmeans, whiten
+#from scipy.cluster.vq import vq, kmeans, whiten
 
 
 def get_files_in_dir(dirname, random_flag = False):
@@ -26,4 +26,23 @@ def get_files_in_dir(dirname, random_flag = False):
 
     return (array(files), array(fullpath_files))
 
+def load_file(filename):
+
+    f = open(filename, 'r')
+    content = []
+    for line in f:
+        content.append(line.rstrip())
+
+    f.close()
+
+    return array(content)
+
+def write_file(data, filename):
+
+    f = open(filename, 'w')
+
+    for item in data:
+        f.write(item + "\n")
+
+    f.close()
 
