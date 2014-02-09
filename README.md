@@ -265,7 +265,7 @@ For example:
 * datafile.v: the right singular vectors.
 * datafile.v.png: the plot of the right singular vectors.
 * datafile.v_id.png: the plot of the right singular vectors with sequence ids of datapoints.
-* datafile.v_{colorlabel}.png: the plot same with datafile.v.png but with color to indicate another dimension (such interestingness) of data.
+* datafile.v_\{colorlabel\}.png: the plot same with datafile.v.png but with color to indicate another dimension (such interestingness) of data.
 * datafile.d: the vector of singular values. 
 * datafile.d.png: the plot of the vector of singular values.
 
@@ -305,7 +305,7 @@ For example:
 For example:
 
     python export_datamatrix_from_summary.py -f mtk/20120815_s200/200_images_20_workers/flickr_low/mtk_label_summary_HIT_aggregated.csv.type.2.csv -c "2,5" -o mtk/20120815_s200/200_images_20_workers/flickr_low/interestingness_socialinterestingness.data -d mtk/20120815_s200/200_images_20_workers/datasource.txt -t "1,2"
-
+    
     python export_datamatrix_from_summary.py -f mtk/20120815_s200/200_images_20_workers/mtk_label_summary_HIT_aggregated_mean_hsv.csv -c "2,5,6,7,8" -o mtk/20120815_s200/200_images_20_workers/hsv_model.data -t '3,4,5' -d mtk/20120815_s200/200_images_20_workers/datasource.txt -p '0,0,0,0,1'
 
 ### Crawling images in image URL list
@@ -355,7 +355,7 @@ For example:
 
     python filter_hit_summary.py -f <HIT summary file> -e 'y' -t <filtering condition> -o <output file>
 
-The <filtering condition> can be set as '{more|less},<field>,<thresholding value>'.
+The \<filtering condition\> can be set as '\{more \| less\},\<field\>,\<thresholding value\>'.
 
 For example:
 
