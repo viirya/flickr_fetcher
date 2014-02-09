@@ -3,6 +3,7 @@ import sys
 import argparse
 import re
 import os
+import urllib
 
 from numpy import array, zeros, mean, std, sort, add, subtract, divide, dot, sqrt, arange, random
 from numpy import linalg as la
@@ -45,4 +46,14 @@ def write_file(data, filename):
         f.write(item + "\n")
 
     f.close()
+
+def crawl_image_from_url(url, filename):
+
+    print("crawling " + url + " ...")
+    f = open(filename, 'wb')
+    f.write(urllib.urlopen(url).read())
+    f.close()
+
+
+
 
