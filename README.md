@@ -361,15 +361,21 @@ For example:
 
     python filter_hit_summary.py -f mtk/20121015_pinterest_1000/HIT_summary_aggregated.csv -e 'y' -t 'less,2,6' -o mtk/20121015_pinterest_1000/HIT_summary_aggregated_lessthan_6.csv
 
-### Drawing plot for data matrix stored in CVS format
+### Drawing plot for data matrix stored in CSV format
 
-    R --slave --args <data matrix file> <x-axis column> <y-axis column> <beginning column of hsv model> <x-axis label> <y-axis label> <output file postfix> <optionally, log-scale axis>< draw_plot_for_cvs.R
+    R --slave --args <data matrix file> <x-axis column> <y-axis column> <beginning column of hsv model> <x-axis label> <y-axis label> <output file postfix> <optionally, log-scale axis>< draw_plot_for_csv.R
 
 For example:
 
-    R --slave --args mtk/20121015_pinterest_1000/hsv_model.data 1 3 3 visual_interestingness mean_hue visual_interestingness_mean_hue_pinterest < draw_plot_for_cvs.R
+    R --slave --args mtk/20121015_pinterest_1000/hsv_model.data 1 3 3 visual_interestingness mean_hue visual_interestingness_mean_hue_pinterest < draw_plot_for_csv.R
 
-    R --slave --args mtk/20121015_pinterest_1000/hsv_model.data 1 3 3 visual_interestingness mean_hue visual_interestingness_mean_hue_pinterest x < draw_plot_for_cvs.R
+    R --slave --args mtk/20121015_pinterest_1000/hsv_model.data 1 3 3 visual_interestingness mean_hue visual_interestingness_mean_hue_pinterest x < draw_plot_for_csv.R
+
+### Fitting polynomial regression with CSV data
+
+    R --slave --args <CSV data file> <x-axis column> <y-axis column> <beginning column of hsv model> <x-axis label> <y-axis label> <output file postfix> <optionally, log-scale axis> < plot_regression_for_csv.R
+ 
+    R --slave --args mtk/20121015_pinterest_1000/hsv_model.data 3 2 3 "mean hue" "social interestingness" social_interestingness_mean_hue_pinterest_plot_regression y < plot_regression_for_csv.R
 
 ### Generating histogram data for HSV model file
 
@@ -409,7 +415,7 @@ For example:
 
 For example:
 
-    python append_hsv_model.py -f mtk/20121015_pinterest_1000/HIT_summary_aggregated.csv -e 'y' -t temp -o HIT_summary_hsv_test.cvs
+    python append_hsv_model.py -f mtk/20121015_pinterest_1000/HIT_summary_aggregated.csv -e 'y' -t temp -o HIT_summary_hsv_test.csv
 
 ### Calculating face detection scores for images and appending to existing CSV file
 
@@ -417,5 +423,5 @@ For example:
     
 For example:
 
-    python append_face_model.py -f mtk/20121015_pinterest_1000/HIT_summary_aggregated.csv -e 'y' -t temp -o HIT_summary_facedetection.cvs -c ~/repos/opencv/data/haarcascades/haarcascade_frontalface_alt.xml
+    python append_face_model.py -f mtk/20121015_pinterest_1000/HIT_summary_aggregated.csv -e 'y' -t temp -o HIT_summary_facedetection.csv -c ~/repos/opencv/data/haarcascades/haarcascade_frontalface_alt.xml
  
