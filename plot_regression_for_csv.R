@@ -9,7 +9,7 @@ stats <- function(dataDimX, dataDimY, colorMatrix, xThresholds, yThreshold) {
     return(record_nums)
 }
 
-perform_ploy_regress <- function(colorData, colorDataDim, colorLabel, xLabel, yLabel, dataDimX, dataDimY, logScale) {
+perform_plot_regression <- function(colorData, colorDataDim, colorLabel, xLabel, yLabel, dataDimX, dataDimY, logScale) {
 
     colorMatrix <- read.csv(colorData, header = FALSE)
     print(colorMatrix)
@@ -24,8 +24,9 @@ perform_ploy_regress <- function(colorData, colorDataDim, colorLabel, xLabel, yL
 
     setEPS()
     postscript(paste(paste(paste(colorData, "_", sep = ''), colorLabel, sep = ''), ".eps", sep = ''))
+    par(mfrow=c(1,1)) 
     plot(xStats ~ yStats)
-    #curve(0.11397 + 0.36582 * x ^ 2 - 0.12958 * x)
+    curve(0.11397 + 0.36582 * x ^ 2 - 0.12958 * x, add = TRUE)
     #plot(lm.out$fitted, lm.out$resid)
     #plot(lm.out$fitted, lm.out$resid, xlab = xLabel, ylab = yLabel, pch = 19, cex = 1.5, log = logScale, cex.axis = 1.5, cex.lab = 1.5, yaxp = c(10, 1000, 1))
     dev.off()
@@ -46,6 +47,6 @@ if (argLen >= 7) {
         logScale <- arg[8]
     }
     print(paste("Draw plot on ", arg, " data...", sep = ''))
-    perform_ploy_regress(colorData, colorDataDim, colorLabel, xLabel, yLabel, dataDimX, dataDimY, logScale)
+    perform_plot_regression(colorData, colorDataDim, colorLabel, xLabel, yLabel, dataDimX, dataDimY, logScale)
 }
 
