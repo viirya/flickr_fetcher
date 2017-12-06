@@ -1,5 +1,9 @@
 # The tools used to fetch flickr photos
 
+The scripts in this repository are used to collect data and run experiments in the paper [1]. They are implemented using Node.js, Python and R.
+
+[1] "Investigating and predicting social and visual image interestingness on social media by crowdsourcing, "  Liang-Chi Hsieh, Winston H Hsu, Hao-Chuan Wang, ICASSP 2014.
+
 ## Install
 
     npm install
